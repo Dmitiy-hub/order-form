@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="wrapper">
+  <div class="form-wrapper">
+    <h1 class="form-title">
+      Форма замовлення
+    </h1>
+    <form action="/" method="post" id="form" class="order-form"> 
+      <p class="order-form-text">
+        Заповніть обов'язкові поля
+      </p>
+      <div class="order-form-field">
+        <p class="order-form-field-text text">
+          Адреса електронної пошти:
+        </p>
+        <input type="text" id="email" name="email" required>
+      </div>
+      <div class="order-form-field">
+        <p class="order-form-field-text text">
+          Ім'я:
+        </p>
+        <input type="text" id="name" name="name">
+      </div>
+      <div class="order-form-field">
+        <p class="order-form-field-text text">
+          Мова перекладу:
+        </p>
+        <input type="text" id="language" name="language">
+      </div>
+      <div class="order-form-field">
+        <div class="order-form-field-text text">
+          <span class="order-form-field-name">
+            Текст для перекладу:
+          </span>
+        </div>
+        <textarea type="text" id="text" name="text" required></textarea>  
+        <div id="error" class="error text"></div>
+      </div>
+      <button class="btn-continue text" type="submit">
+        Замовити переклад
+      </button>
+    </form>  
+</div>
+<div class="orders-wrapper">
+  <h1>Замовлення</h1>
+  <div >
+  <% if(orders.length) { %>
+    <% orders.forEach(({id, email, createdAt, name, language, text, date}) => { %>
+      <article class="orders">        
+        <div class="orders-info"> 
+          <button class="orders-btn lnr lnr-cross" data-id="<%= id %>"></button>   
+          <a class="orders-name" href="/order/<%= id %>"><%= name %></a>
+          <span><%= email %></span>
+          <p class="orders-date"><%= createdAt.toLocaleDateString() %></p>
+        </div>
+        <div>
+          
+        </div>
+      </article>
+   <% }) %>
+    <% } %>
+</div>
+</div>
+</div>
+  <script>
+    document.addEventListener('click', (e) => {
+      const id = e.target?.dataset?.id || null;
+      if (id) {
+        fetch(`/order/${id}`, {
+          method: 'DELETE',
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
